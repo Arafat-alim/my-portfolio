@@ -8,7 +8,7 @@
 
 ---
 
-#### sub-project: "frontend_sanity"
+#### sub-project: "frontend_react"
 
 - Node JS version: "v18.20.4"
 - Update the dependencies using the command: `npm install --legacy-peer-deps`
