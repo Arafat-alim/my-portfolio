@@ -16,7 +16,9 @@
 - React Version: "^17.0.2"
 - Install this dependency: "ajv"
   - Command to install the package: `npm install ajv --legacy-peer-deps`
+- Command to build the project `npm run build`
 - Command to run the react server: `npm start`
+- Successfully implemented the CI/CD pipline.
 
 ---
 
