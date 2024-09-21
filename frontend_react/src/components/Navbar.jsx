@@ -32,22 +32,26 @@ const NavBar = () => {
       return data.ip; // Return IP address for further use
     } catch (err) {
       console.error("Error fetching IP:", err);
+    } finally {
+      // Ensure getVisitors is called regardless of success or error
+      const result = await getVisitors(); // Call getVisitors after sendVisitors
+      setFetchVisitedUsers(result);
     }
   };
 
   const sendVisitors = async () => {
-    if (!visitorData || !ipAddress) {
+    if (!visitorData && !ipAddress) {
       return; // Ensure both data are available
     }
 
     const visitorInfo = {
       ip_address: ipAddress,
-      country: visitorData.country || "Not-Found",
-      country_code: visitorData.country || "Not-Found",
-      state: visitorData.region || "Not-Found",
-      city: visitorData.city || "Not-Found",
-      isp: visitorData.org || "Not-Found",
-      user_agent: navigator.userAgent || "Not-Found",
+      country: visitorData?.country || "Not-Found",
+      country_code: visitorData?.country || "Not-Found",
+      state: visitorData?.region || "Not-Found",
+      city: visitorData?.city || "Not-Found",
+      isp: visitorData?.org || "Not-Found",
+      user_agent: navigator?.userAgent || "Not-Found",
     };
 
     try {
@@ -57,6 +61,7 @@ const NavBar = () => {
     } finally {
       // Ensure getVisitors is called regardless of success or error
       const result = await getVisitors(); // Call getVisitors after sendVisitors
+      console.log("result__test__", result);
       setFetchVisitedUsers(result);
     }
   };
@@ -71,7 +76,7 @@ const NavBar = () => {
   }, []); // Only run once on mount
 
   useEffect(() => {
-    if (visitorData) {
+    if (visitorData || ipAddress) {
       sendVisitors(); // Call sendVisitors when visitorData is available
     }
   }, [visitorData, ipAddress]); // Trigger when visitorData or ipAddress changes
@@ -111,6 +116,7 @@ const NavBar = () => {
                 "testimonials",
                 "skills",
                 "contact",
+                `visitors count: ${fetchVisitedUsers.length}`,
               ].map((item) => (
                 <li key={item}>
                   <a href={`#${item}`} onClick={() => setToggle(false)}>

@@ -77,6 +77,10 @@
   text-transform: uppercase;
   font-size: small;
   margin-top: 8px;
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 }
 
 .app__navbar-counter:hover {
