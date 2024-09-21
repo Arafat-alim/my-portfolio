@@ -93,6 +93,7 @@ const NavBar = () => {
           )
         )}
       </ul>
+      <div className="app__navbar-counter">Visitors Count: 100</div>
       <div className="app__navbar-menu">
         <HiMenuAlt4 onClick={() => setToggle(true)} />
 

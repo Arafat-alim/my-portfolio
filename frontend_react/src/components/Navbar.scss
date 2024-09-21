@@ -70,6 +70,20 @@
   }
 }
 
+.app__navbar-counter {
+  width: 150px;
+  align-items: center;
+  color: var(--gray-color);
+  text-transform: uppercase;
+  font-size: small;
+}
+
+.app__navbar-counter:hover {
+  color: var(--secondary-color);
+  font-weight: 500;
+  cursor: pointer;
+}
+
 .app__navbar-menu {
   width: 35px;
   height: 35px;
