@@ -12,13 +12,11 @@ const NavBar = () => {
   const [ipAddress, setIpAddress] = useState("");
   const [fetchVisitedUsers, setFetchVisitedUsers] = useState([]);
 
-  console.log("fetchVisitedUsers___", fetchVisitedUsers);
-
   const sendJsonP = useJSONP({
     url: `https://ipinfo.io/json?token=${process.env.REACT_APP_API_INFO_TOKEN}`,
     id: "ipinfoScript",
     callback: (data) => {
-      console.log("Visitor Data:", data);
+      // console.log("Visitor Data:", data);
       if (data && !data.error) {
         setVisitorData(data);
       }
@@ -53,7 +51,7 @@ const NavBar = () => {
     };
 
     try {
-      // await postVisitor(visitorInfo);
+      await postVisitor(visitorInfo);
     } catch (error) {
       console.error("Error Occurred: ", error);
     } finally {
@@ -93,7 +91,9 @@ const NavBar = () => {
           )
         )}
       </ul>
-      <div className="app__navbar-counter">Visitors Count: 100</div>
+      <div className="app__navbar-counter">
+        Visitors Count: {fetchVisitedUsers.length}
+      </div>
       <div className="app__navbar-menu">
         <HiMenuAlt4 onClick={() => setToggle(true)} />
 
