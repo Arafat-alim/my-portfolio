@@ -83,10 +83,21 @@
   }
 }
 
-.app__navbar-counter:hover {
-  color: var(--secondary-color);
-  font-weight: 500;
+// .app__navbar-counter:hover {
+//   color: var(--secondary-color);
+//   font-weight: 500;
+//   cursor: pointer;
+// }
+
+.app__navbar-counter--section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app__navbar-counter--section:hover {
   cursor: pointer;
+  color: var(--secondary-color);
+  font-weight: 700;
 }
 
 .app__navbar-menu {

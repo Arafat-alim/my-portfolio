@@ -54,7 +54,7 @@ const NavBar = () => {
     };
 
     try {
-      await postVisitor(visitorInfo);
+      // await postVisitor(visitorInfo);
     } catch (error) {
       console.error("Error Occurred: ", error);
     } finally {
@@ -95,7 +95,17 @@ const NavBar = () => {
         )}
       </ul>
       <div className="app__navbar-counter">
-        Visitors Count: {fetchVisitedUsers.length}
+        <div className="app__navbar-counter--section">
+          <img
+            src="https://res.cloudinary.com/cocoder/image/upload/v1726952265/eye-svgrepo-com_jo0cju.svg"
+            alt="preview-icon"
+            style={{ width: "25px", height: "25px", marginRight: "5px" }}
+          />
+          <p style={{ fontWeight: 500, fontSize: "1rem" }}>
+            {" "}
+            {fetchVisitedUsers.length}
+          </p>
+        </div>
       </div>
       <div className="app__navbar-menu">
         <HiMenuAlt4 onClick={() => setToggle(true)} />
