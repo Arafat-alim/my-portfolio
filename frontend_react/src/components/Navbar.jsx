@@ -54,7 +54,7 @@ const NavBar = () => {
     };
 
     try {
-      // await postVisitor(visitorInfo);
+      await postVisitor(visitorInfo);
     } catch (error) {
       console.error("Error Occurred: ", error);
     } finally {
