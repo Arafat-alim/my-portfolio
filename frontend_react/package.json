@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@neondatabase/serverless": "^0.9.5",
     "@sanity/client": "^3.4.1",
     "@sanity/image-url": "^1.0.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -15,8 +16,10 @@
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.7.1",
+    "react-ipgeolocation": "^1.4.0",
     "react-scripts": "5.0.1",
     "react-tooltip": "^4.2.21",
+    "use-jsonp": "^1.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
