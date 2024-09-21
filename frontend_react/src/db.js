@@ -12,7 +12,6 @@ const sql = neon(
 export const getVisitors = async () => {
   try {
     const result = await sql`SELECT * FROM visitor_infov1`; // Use tagged template for queries
-    console.log("result__@!", result);
     return result; // Return the fetched data
   } catch (error) {
     console.error("Error fetching data from Neon:", error);
@@ -30,7 +29,6 @@ export const postVisitor = async (visitorInfo) => {
       INSERT INTO visitor_infov1 (ip_address, country, country_code, state, city, isp, user_agent, visit_time)
       VALUES (${ip_address}, ${country}, ${country_code}, ${state}, ${city}, ${isp}, ${user_agent}, CURRENT_TIMESTAMP)
     `;
-    console.log("Visitor data posted successfully!");
   } catch (error) {
     console.error("Error occurred while posting data: ", error);
     throw error; // Rethrow the error for further handling if needed

@@ -16,7 +16,6 @@ const NavBar = () => {
     url: `https://ipinfo.io/json?token=${process.env.REACT_APP_API_INFO_TOKEN}`,
     id: "ipinfoScript",
     callback: (data) => {
-      // console.log("Visitor Data:", data);
       if (data && !data.error) {
         setVisitorData(data);
       }
@@ -61,7 +60,6 @@ const NavBar = () => {
     } finally {
       // Ensure getVisitors is called regardless of success or error
       const result = await getVisitors(); // Call getVisitors after sendVisitors
-      console.log("result__test__", result);
       setFetchVisitedUsers(result);
     }
   };
