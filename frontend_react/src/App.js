@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { About, Footer, Header, Skills, Testimonials, Work } from "./container";
 import { NavBar } from "./components";
@@ -6,6 +6,22 @@ import { NavBar } from "./components";
 import "./App.scss";
 
 const App = () => {
+  useEffect(() => {
+    const preventCloseTab = (event) => {
+      let e = event || window.event;
+      if (e) {
+        e.preventDefault();
+        e.returnValue = "Are you sure do you want to leave";
+      }
+    };
+
+    window.addEventListener("beforeunload", preventCloseTab);
+
+    return () => {
+      window.removeEventListener("beforeunload", preventCloseTab);
+    };
+  }, []);
+
   return (
     <div className="app">
       <Helmet>
