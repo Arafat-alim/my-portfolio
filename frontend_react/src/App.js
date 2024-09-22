@@ -7,19 +7,21 @@ import "./App.scss";
 
 const App = () => {
   useEffect(() => {
-    const preventCloseTab = (event) => {
-      let e = event || window.event;
-      if (e) {
-        e.preventDefault();
-        e.returnValue = "Are you sure do you want to leave";
-      }
-    };
+    if (process.env.REACT_APP_ENABLED_PREVENT_TAB_TO_CLOSE === "true") {
+      const preventCloseTab = (event) => {
+        let e = event || window.event;
+        if (e) {
+          e.preventDefault();
+          e.returnValue = "Are you sure do you want to leave";
+        }
+      };
 
-    window.addEventListener("beforeunload", preventCloseTab);
+      window.addEventListener("beforeunload", preventCloseTab);
 
-    return () => {
-      window.removeEventListener("beforeunload", preventCloseTab);
-    };
+      return () => {
+        window.removeEventListener("beforeunload", preventCloseTab);
+      };
+    }
   }, []);
 
   return (
