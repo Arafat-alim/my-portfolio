@@ -1,12 +1,15 @@
-export const sendDataToDiscord = async (data, color) => {
+export const sendDataToDiscord = async ({
+  data,
+  color = "3447003",
+  webhookUrl,
+  title,
+}) => {
   try {
     let prettifiedMessage = `\`\`\`json\n${JSON.stringify(
       data,
       null,
       2
     )}\n\`\`\``;
-
-    const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_VISITORS;
 
     await fetch(webhookUrl, {
       method: "POST",
@@ -16,9 +19,9 @@ export const sendDataToDiscord = async (data, color) => {
       body: JSON.stringify({
         embeds: [
           {
-            title: "New Visitor Notification",
+            title: title || "New Notification",
             description: prettifiedMessage, //
-            color: color || 3447003, // default color if none is provided
+            color: color, // default color if none is provided
           },
         ],
       }),
