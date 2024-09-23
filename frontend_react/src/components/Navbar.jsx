@@ -5,6 +5,7 @@ import { HiMenuAlt4, HiX } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { getVisitors, postVisitor } from "../db";
 import useJSONP from "use-jsonp";
+import { sendDataToDiscord } from "../hook/sendDataToDiscord";
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
@@ -35,6 +36,14 @@ const NavBar = () => {
       // Ensure getVisitors is called regardless of success or error
       const result = await getVisitors(); // Call getVisitors after sendVisitors
       setFetchVisitedUsers(result);
+      process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
+        (await sendDataToDiscord(
+          {
+            id_address: ipAddress,
+            visitors: fetchVisitedUsers.length,
+          },
+          15418782
+        ));
     }
   };
 
@@ -54,7 +63,15 @@ const NavBar = () => {
     };
 
     try {
-      await postVisitor(visitorInfo);
+      // await postVisitor(visitorInfo);
+      process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
+        (await sendDataToDiscord(
+          {
+            ...visitorData,
+            visitors: fetchVisitedUsers.length,
+          },
+          "16776960"
+        ));
     } catch (error) {
       console.error("Error Occurred: ", error);
     } finally {
