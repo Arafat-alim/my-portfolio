@@ -13,6 +13,8 @@ const NavBar = () => {
   const [ipAddress, setIpAddress] = useState("");
   const [fetchVisitedUsers, setFetchVisitedUsers] = useState([]);
 
+  const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_VISITORS;
+
   const sendJsonP = useJSONP({
     url: `https://ipinfo.io/json?token=${process.env.REACT_APP_API_INFO_TOKEN}`,
     id: "ipinfoScript",
@@ -37,13 +39,15 @@ const NavBar = () => {
       const result = await getVisitors(); // Call getVisitors after sendVisitors
       setFetchVisitedUsers(result);
       process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
-        (await sendDataToDiscord(
-          {
+        (await sendDataToDiscord({
+          data: {
             id_address: ipAddress,
             visitors: fetchVisitedUsers.length,
           },
-          15418782
-        ));
+          color: 15418782,
+          title: "🆕 New Visitor Notification",
+          webhookUrl: webhookUrl,
+        }));
     }
   };
 
@@ -63,15 +67,17 @@ const NavBar = () => {
     };
 
     try {
-      // await postVisitor(visitorInfo);
+      await postVisitor(visitorInfo);
       process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
-        (await sendDataToDiscord(
-          {
+        (await sendDataToDiscord({
+          data: {
             ...visitorData,
             visitors: fetchVisitedUsers.length,
           },
-          "16776960"
-        ));
+          color: "16776960",
+          title: "🆕 New Visitor Notification",
+          webhookUrl: webhookUrl,
+        }));
     } catch (error) {
       console.error("Error Occurred: ", error);
     } finally {
