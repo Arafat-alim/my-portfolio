@@ -41,8 +41,8 @@ const NavBar = () => {
       process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
         (await sendDataToDiscord({
           data: {
-            id_address: ipAddress,
-            visitors: fetchVisitedUsers.length,
+            id_address: `${ipAddress}`,
+            visitors: `${fetchVisitedUsers.length}`,
           },
           color: 15418782,
           title: "🆕 New Visitor Notification",
@@ -69,6 +69,7 @@ const NavBar = () => {
     try {
       await postVisitor(visitorInfo);
       process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
+        visitorInfo &&
         (await sendDataToDiscord({
           data: {
             ...visitorData,
