@@ -5,6 +5,7 @@ import { AppWrap, MotionWrap } from "../../wrapper";
 import { client } from "../../client.js";
 
 import "./Footer.scss";
+import { sendDataToDiscord } from "../../hook/sendDataToDiscord.js";
 
 const Footer = () => {
   const [msg, setMsg] = useState("");
@@ -18,7 +19,9 @@ const Footer = () => {
   //   .then(console.log)
   //   .catch(console.error);
 
-  const handleSubmit = () => {
+  const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_FORM;
+
+  const handleSubmit = async () => {
     setLoading(true);
 
     const contact = {
@@ -37,6 +40,17 @@ const Footer = () => {
         setLoading(false);
         setIsFormSubmitted(true);
         setMsg("");
+      });
+      // ! send form data to discord channel
+      await sendDataToDiscord({
+        data: {
+          name: contact.name,
+          email: contact.email,
+          message: contact.message,
+        },
+        color: "16753920",
+        webhookUrl: webhookUrl,
+        title: "💬 Someone has messaged!!!",
       });
     }
   };
