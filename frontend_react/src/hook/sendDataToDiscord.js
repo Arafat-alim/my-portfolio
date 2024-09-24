@@ -5,6 +5,7 @@ export const sendDataToDiscord = async ({
   title,
 }) => {
   try {
+    const mySite = process.env.REACT_APP_PORTFOLIO_WEBSITE;
     let prettifiedMessage = `\`\`\`json\n${JSON.stringify(
       data,
       null,
@@ -19,7 +20,7 @@ export const sendDataToDiscord = async ({
       body: JSON.stringify({
         embeds: [
           {
-            title: title || "New Notification",
+            title: `${title}--${mySite}` || `New Notification from ${mySite}`,
             description: prettifiedMessage, //
             color: color, // default color if none is provided
           },
