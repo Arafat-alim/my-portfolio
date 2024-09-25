@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { images } from "../../constants";
 import { AppWrap, MotionWrap } from "../../wrapper";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { client } from "../../client.js";
 
@@ -9,10 +10,23 @@ import { sendDataToDiscord } from "../../hook/sendDataToDiscord.js";
 
 const Footer = () => {
   const [msg, setMsg] = useState("");
+  const [enabledSubmitBtn, setEnabledSubmitBtn] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+    captchaToken: "",
+  });
+
+  const { name, email, message, captchaToken } = formData;
+  const [isFormSubmmited, setIsFormSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   //! Deleting all the contact details
   // client
   //   .delete({ query: '*[_type == "contact"]' })
@@ -32,14 +46,22 @@ const Footer = () => {
     };
     if (contact.name === "" || contact.email === "" || contact.message === "") {
       setLoading(false);
+      setEnabledSubmitBtn(false);
       setMsg("Please Fill the required Fields");
     } else {
       //! Upload the data to form
+      setEnabledSubmitBtn(true);
       setMsg("Please Wait!");
       client.create(contact).then(() => {
         setLoading(false);
         setIsFormSubmitted(true);
         setMsg("");
+        setFormData({
+          name: "",
+          email: "",
+          message: "",
+          captchaToken: "",
+        });
       });
       // ! send form data to discord channel
       await sendDataToDiscord({
@@ -54,15 +76,7 @@ const Footer = () => {
       });
     }
   };
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
 
-  const { name, email, message } = formData;
-  const [isFormSubmmited, setIsFormSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
   // useEffect(() => {
   //   const query = "*[_type == 'contact']";
   //   client
@@ -70,6 +84,21 @@ const Footer = () => {
   //     .then((data) => console.log(data))
   //     .catch((err) => console.log("Footer Error", err));
   // }, []);
+
+  const handleCaptchaChange = (value) => {
+    setFormData({
+      ...formData,
+      captchaToken: value,
+    });
+  };
+
+  useEffect(() => {
+    if (name === "" || email === "" || message === "" || captchaToken === "") {
+      setEnabledSubmitBtn(false);
+    } else {
+      setEnabledSubmitBtn(true);
+    }
+  }, [formData]);
   return (
     <>
       <h2 className="head-text">Take a coffee & chat with Me! ☕ </h2>
@@ -120,7 +149,25 @@ const Footer = () => {
               onChange={handleInputChange}
             ></textarea>
           </div>
-          <button type="button" className="p-text" onClick={handleSubmit}>
+
+          <ReCAPTCHA
+            sitekey={process.env.REACT_APP_GOOGLE_CAPTCHA_SITE_KEY}
+            onChange={handleCaptchaChange}
+            style={{
+              width: "100%",
+            }}
+          />
+
+          <button
+            type="button"
+            className={`p-text`}
+            onClick={handleSubmit}
+            disabled={!enabledSubmitBtn}
+            style={{
+              backgroundColor: !enabledSubmitBtn ? "gray" : "",
+              cursor: !enabledSubmitBtn ? "not-allowed" : "pointer",
+            }}
+          >
             {loading ? "Sending" : "Send Message"}
           </button>
         </div>
