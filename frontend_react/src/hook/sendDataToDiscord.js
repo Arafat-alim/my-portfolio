@@ -12,6 +12,10 @@ export const sendDataToDiscord = async ({
       2
     )}\n\`\`\``;
 
+    if (!data || !webhookUrl || !title) {
+      return;
+    }
+
     await fetch(webhookUrl, {
       method: "POST",
       headers: {
