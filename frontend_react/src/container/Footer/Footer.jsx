@@ -7,6 +7,7 @@ import { client } from "../../client.js";
 
 import "./Footer.scss";
 import { sendDataToDiscord } from "../../hook/sendDataToDiscord.js";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker.jsx";
 
 const Footer = () => {
   const [msg, setMsg] = useState("");
@@ -16,6 +17,8 @@ const Footer = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const gaEventTracker = useAnalyticsEventTracker("Contact us");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -105,13 +108,21 @@ const Footer = () => {
       <div className="app__footer-cards">
         <div className="app__footer-card">
           <img src={images.email} alt="email" />
-          <a href="mailto:arafat.aman.alim@gmail.com" className="p-text">
+          <a
+            href="mailto:arafat.aman.alim@gmail.com"
+            className="p-text"
+            onClick={() => gaEventTracker("mail")}
+          >
             @arafat-alim
           </a>
         </div>
         <div className="app__footer-card">
           <img src={images.mobile} alt="mobile" />
-          <a href="tel: +91 (828) 298-5207" className="p-text">
+          <a
+            href="tel: +91 (828) 298-5207"
+            className="p-text"
+            onClick={() => gaEventTracker("mobile")}
+          >
             @Mobile
           </a>
         </div>

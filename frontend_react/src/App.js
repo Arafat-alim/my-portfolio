@@ -2,8 +2,12 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { About, Footer, Header, Skills, Testimonials, Work } from "./container";
 import { NavBar } from "./components";
+import ReactGA from "react-ga";
 
 import "./App.scss";
+
+const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTCS_TRACKING_ID; // OUR_TRACKING_ID
+ReactGA.initialize(TRACKING_ID);
 
 const App = () => {
   useEffect(() => {
