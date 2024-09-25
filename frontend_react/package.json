@@ -14,6 +14,7 @@
     "node-sass": "^8.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-google-recaptcha": "^3.1.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.7.1",
     "react-ipgeolocation": "^1.4.0",
