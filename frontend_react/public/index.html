@@ -42,6 +42,18 @@
   <meta name="google-site-verification" content="0cLAa1x4Meu2z3l6AfMXWu-V9zeft9u9a_uRknmXTik" />
   <!-- ! icon part finish -->
 
+  
+<!-- Google tag (gtag.js) -->
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GOOGLE_ANALYTCS_TRACKING_ID}`}></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', process.env.REACT_APP_GOOGLE_ANALYTCS_TRACKING_ID);
+</script>
+
+
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
   <title>dev. Arafat Alim &copy; </title>
