@@ -15,12 +15,15 @@ const NavBar = () => {
   const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_VISITORS;
 
   const sendVisitors = async () => {
+    console.log("Calling___sendVisitor");
     if (!geoUserInfo && !ip) {
       return; // Ensure both data are available
     }
+    console.log("PASSED___1");
 
     if (geoUserInfo?.status === "success" && ip) {
       try {
+        console.log("PASSED___2");
         const visitorInfo = {
           ip_address: ip,
           country: geoUserInfo?.country || "Not-Found",
@@ -32,19 +35,22 @@ const NavBar = () => {
         };
 
         await postVisitor(visitorInfo);
-        process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
+        process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "false" &&
           geoUserInfo &&
-          (await sendDataToDiscord({
-            data: {
-              ...geoUserInfo,
-              visitors: fetchVisitedUsers.length,
-              user_agent: navigator.userAgent,
-              server: process.env.NODE_ENV || "not-found",
-            },
-            color: "12533951",
-            title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
-            webhookUrl: webhookUrl,
-          }));
+          console.log("PASSED___3")(
+            await sendDataToDiscord({
+              data: {
+                ...geoUserInfo,
+                visitors: fetchVisitedUsers.length,
+                user_agent: navigator.userAgent,
+                server: process.env.NODE_ENV || "not-found",
+              },
+              color: "12533951",
+              title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
+              webhookUrl: webhookUrl,
+            })
+          );
+        console.log("PASSED___4");
       } catch (err) {
         if (err) {
           console.error("Error Occurred: ", err);
@@ -59,7 +65,9 @@ const NavBar = () => {
   };
 
   useEffect(() => {
+    console.log("Called__Before sendvisitor");
     sendVisitors();
+    console.log("Called__After sendvisitor");
   }, [ip, geoUserInfo]);
 
   return (
