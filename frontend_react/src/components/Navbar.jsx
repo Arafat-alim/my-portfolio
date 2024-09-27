@@ -4,104 +4,63 @@ import { images } from "../constants";
 import { HiMenuAlt4, HiX } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { getVisitors, postVisitor } from "../db";
-import useJSONP from "use-jsonp";
 import { sendDataToDiscord } from "../hook/sendDataToDiscord";
+import useGeoIpInfo from "../hook/useGeoIpInfo";
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
-  const [visitorData, setVisitorData] = useState(null);
-  const [ipAddress, setIpAddress] = useState("");
   const [fetchVisitedUsers, setFetchVisitedUsers] = useState([]);
+  const { ipAddress: ip, geoUserInfo, error } = useGeoIpInfo();
 
   const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_VISITORS;
 
-  const sendJsonP = useJSONP({
-    url: `https://ipinfo.io/json?token=${process.env.REACT_APP_API_INFO_TOKEN}`,
-    id: "ipinfoScript",
-    callback: (data) => {
-      if (data && !data.error) {
-        setVisitorData(data);
-      }
-    },
-    callbackParam: "callback",
-  });
-
-  const fetchIp = async () => {
-    try {
-      const response = await fetch("https://api64.ipify.org?format=json");
-      const data = await response.json();
-      setIpAddress(data.ip);
-      return data.ip; // Return IP address for further use
-    } catch (err) {
-      console.error("Error fetching IP:", err);
-    } finally {
-      // Ensure getVisitors is called regardless of success or error
-      const result = await getVisitors(); // Call getVisitors after sendVisitors
-      setFetchVisitedUsers(result);
-      process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
-        (await sendDataToDiscord({
-          data: {
-            id_address: `${ipAddress}`,
-            visitors: `${fetchVisitedUsers.length}`,
-          },
-          color: 15418782,
-          title: "🆕 New Visitor Notification",
-          webhookUrl: webhookUrl,
-        }));
-    }
-  };
-
   const sendVisitors = async () => {
-    if (!visitorData && !ipAddress) {
+    if (!geoUserInfo && !ip) {
       return; // Ensure both data are available
     }
 
-    const visitorInfo = {
-      ip_address: ipAddress,
-      country: visitorData?.country || "Not-Found",
-      country_code: visitorData?.country || "Not-Found",
-      state: visitorData?.region || "Not-Found",
-      city: visitorData?.city || "Not-Found",
-      isp: visitorData?.org || "Not-Found",
-      user_agent: navigator?.userAgent || "Not-Found",
-    };
+    if (geoUserInfo?.status === "success" && ip) {
+      try {
+        const visitorInfo = {
+          ip_address: ip,
+          country: geoUserInfo?.country || "Not-Found",
+          country_code: geoUserInfo?.countryCode || "Not-Found",
+          state: geoUserInfo?.regionName || "Not-Found",
+          city: geoUserInfo?.city || "Not-Found",
+          isp: geoUserInfo?.org || "Not-Found",
+          user_agent: navigator?.userAgent || "Not-Found",
+        };
 
-    try {
-      await postVisitor(visitorInfo);
-      process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
-        visitorInfo &&
-        (await sendDataToDiscord({
-          data: {
-            ...visitorData,
-            visitors: fetchVisitedUsers.length,
-          },
-          color: "16776960",
-          title: "🆕 New Visitor Notification",
-          webhookUrl: webhookUrl,
-        }));
-    } catch (error) {
-      console.error("Error Occurred: ", error);
-    } finally {
-      // Ensure getVisitors is called regardless of success or error
-      const result = await getVisitors(); // Call getVisitors after sendVisitors
-      setFetchVisitedUsers(result);
+        // await postVisitor(visitorInfo);
+        process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
+          geoUserInfo &&
+          (await sendDataToDiscord({
+            data: {
+              ...geoUserInfo,
+              visitors: fetchVisitedUsers.length,
+              user_agent: navigator.userAgent,
+              server: process.env.NODE_ENV || "not-found",
+            },
+            color: "12533951",
+            title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
+            webhookUrl: webhookUrl,
+          }));
+      } catch (err) {
+        if (err) {
+          console.error("Error Occurred: ", err);
+        } else if (error) {
+          console.error("Error Occurred: ", err);
+        }
+      } finally {
+        const result = await getVisitors(); // Call getVisitors after sendVisitors
+        setFetchVisitedUsers(result);
+      }
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchIp(); // Fetch IP first
-      sendJsonP(); // Then fetch visitor data
-    };
-
-    fetchData();
-  }, []); // Only run once on mount
-
-  useEffect(() => {
-    if (visitorData || ipAddress) {
-      sendVisitors(); // Call sendVisitors when visitorData is available
-    }
-  }, [visitorData, ipAddress]); // Trigger when visitorData or ipAddress changes
+    sendVisitors();
+  }, [ip, geoUserInfo]);
 
   return (
     <nav className="app__navbar">
