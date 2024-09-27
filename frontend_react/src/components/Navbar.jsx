@@ -57,9 +57,20 @@ const NavBar = () => {
       }
     } else if (!geoUserInfo && ip) {
       try {
-        process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
-          geoUserInfo &&
-          (await sendDataToDiscord({
+        const ipData = {
+          ip_address: ip,
+          country: "Not-Found",
+          country_code: "Not-Found",
+          state: "Not-Found",
+          city: "Not-Found",
+          isp: "Not-Found",
+          user_agent: navigator?.userAgent || "Not-Found",
+        };
+
+        await postVisitor(ipData);
+
+        if (process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" && ip) {
+          await sendDataToDiscord({
             data: {
               ip_address: ip,
               visitors: fetchVisitedUsers.length,
@@ -69,9 +80,10 @@ const NavBar = () => {
             color: "139",
             title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
             webhookUrl: webhookUrl,
-          }));
+          });
+        }
       } catch (error) {
-        console.error("Error occured: ", error);
+        console.error("Error occurred: ", error);
       } finally {
         const result = await getVisitors(); // Call getVisitors after sendVisitors
         setFetchVisitedUsers(result);
