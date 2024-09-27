@@ -56,19 +56,26 @@ const NavBar = () => {
         setFetchVisitedUsers(result);
       }
     } else if (!geoUserInfo && ip) {
-      process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
-        geoUserInfo &&
-        (await sendDataToDiscord({
-          data: {
-            ip_address: ip,
-            visitors: fetchVisitedUsers.length,
-            user_agent: navigator.userAgent,
-            server: process.env.NODE_ENV || "not-found",
-          },
-          color: "139",
-          title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
-          webhookUrl: webhookUrl,
-        }));
+      try {
+        process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
+          geoUserInfo &&
+          (await sendDataToDiscord({
+            data: {
+              ip_address: ip,
+              visitors: fetchVisitedUsers.length,
+              user_agent: navigator.userAgent,
+              server: process.env.NODE_ENV || "not-found",
+            },
+            color: "139",
+            title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
+            webhookUrl: webhookUrl,
+          }));
+      } catch (error) {
+        console.error("Error occured: ", error);
+      } finally {
+        const result = await getVisitors(); // Call getVisitors after sendVisitors
+        setFetchVisitedUsers(result);
+      }
     }
   };
 
