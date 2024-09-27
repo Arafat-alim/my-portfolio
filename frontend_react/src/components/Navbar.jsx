@@ -34,19 +34,17 @@ const NavBar = () => {
         await postVisitor(visitorInfo);
         process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
           geoUserInfo &&
-          (
-            await sendDataToDiscord({
-              data: {
-                ...geoUserInfo,
-                visitors: fetchVisitedUsers.length,
-                user_agent: navigator.userAgent,
-                server: process.env.NODE_ENV || "not-found",
-              },
-              color: "12533951",
-              title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
-              webhookUrl: webhookUrl,
-            })
-          );
+          (await sendDataToDiscord({
+            data: {
+              ...geoUserInfo,
+              visitors: fetchVisitedUsers.length,
+              user_agent: navigator.userAgent,
+              server: process.env.NODE_ENV || "not-found",
+            },
+            color: "12533951",
+            title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
+            webhookUrl: webhookUrl,
+          }));
       } catch (err) {
         if (err) {
           console.error("Error Occurred: ", err);
@@ -57,22 +55,20 @@ const NavBar = () => {
         const result = await getVisitors(); // Call getVisitors after sendVisitors
         setFetchVisitedUsers(result);
       }
-    }else if(!geoUserInfo && ip){
+    } else if (!geoUserInfo && ip) {
       process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
         geoUserInfo &&
-          await sendDataToDiscord({
-            data: {
-              ip_address: ip, 
-              visitors: fetchVisitedUsers.length,
-              user_agent: navigator.userAgent,
-              server: process.env.NODE_ENV || "not-found",
-            },
-            color: "139",
-            title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
-            webhookUrl: webhookUrl,
-          })
-        );
-      }
+        (await sendDataToDiscord({
+          data: {
+            ip_address: ip,
+            visitors: fetchVisitedUsers.length,
+            user_agent: navigator.userAgent,
+            server: process.env.NODE_ENV || "not-found",
+          },
+          color: "139",
+          title: `🏴‍☠️ Ahoy! A Pirate Has Docked at Arafat House`,
+          webhookUrl: webhookUrl,
+        }));
     }
   };
 
