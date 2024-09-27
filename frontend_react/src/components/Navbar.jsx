@@ -31,7 +31,7 @@ const NavBar = () => {
           user_agent: navigator?.userAgent || "Not-Found",
         };
 
-        // await postVisitor(visitorInfo);
+        await postVisitor(visitorInfo);
         process.env.REACT_APP_ENABLED_DISCORD_WEBHOOK === "true" &&
           geoUserInfo &&
           (await sendDataToDiscord({
