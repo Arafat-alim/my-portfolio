@@ -24,7 +24,7 @@ export const sendDataToDiscord = async ({
       body: JSON.stringify({
         embeds: [
           {
-            title: `${title}--${mySite}` || `New Notification from ${mySite}`,
+            title: `${title} >> ${mySite}` || `New Notification from ${mySite}`,
             description: prettifiedMessage, //
             color: color, // default color if none is provided
           },
