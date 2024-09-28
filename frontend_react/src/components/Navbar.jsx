@@ -14,6 +14,15 @@ const NavBar = () => {
 
   const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_VISITORS;
 
+  const fetchVisitor = async () => {
+    const result = await getVisitors(); // Call getVisitors after sendVisitors
+    setFetchVisitedUsers(result);
+  };
+
+  useEffect(() => {
+    fetchVisitor();
+  }, [fetchVisitedUsers]);
+
   const sendVisitors = async () => {
     if (!geoUserInfo && !ip) {
       return; // Ensure both data are available
@@ -51,9 +60,6 @@ const NavBar = () => {
         } else if (error) {
           console.error("Error Occurred: ", err);
         }
-      } finally {
-        const result = await getVisitors(); // Call getVisitors after sendVisitors
-        setFetchVisitedUsers(result);
       }
     } else if (!geoUserInfo && ip) {
       try {
