@@ -90,9 +90,6 @@ const NavBar = () => {
         }
       } catch (error) {
         console.error("Error occurred: ", error);
-      } finally {
-        const result = await getVisitors(); // Call getVisitors after sendVisitors
-        setFetchVisitedUsers(result);
       }
     }
   };
