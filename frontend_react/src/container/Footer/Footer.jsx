@@ -104,7 +104,13 @@ const Footer = () => {
   }, [formData]);
   return (
     <>
-      <h2 className="head-text">Take a coffee & chat with Me! ☕ </h2>
+      <h2 className="head-text">
+        🚀 Open to Collaborations and Job Offers! 💼
+      </h2>
+      <p className="special-p-text">
+        I’m available for open-source work or your next hire. Let’s explore how
+        we can work together!
+      </p>
       <div className="app__footer-cards">
         <div className="app__footer-card">
           <img src={images.email} alt="email" />
@@ -184,7 +190,13 @@ const Footer = () => {
         </div>
       ) : (
         <div>
-          <h3 className="head-text">Thank you for getting in Touch ♥</h3>
+          <h3 className="specialHead-text">
+            Thank you for reaching out! 🙌 Your interest means a lot to me. ❤️
+          </h3>
+          <p className="special-p-text">
+            I'm excited to explore new collaborations or opportunities together.
+            I'll get back to you shortly! 🚀
+          </p>
         </div>
       )}
       <div>
