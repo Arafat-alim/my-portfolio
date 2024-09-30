@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { getVisitors } from "../db";
 
 const useGeoIpInfo = () => {
   const [ipAddress, setIpAddress] = useState("");
   const [geoUserInfo, setGeoUserInfo] = useState(null);
   const [error, setError] = useState(null);
+  const [fetchUser, setFetchUser] = useState(null);
 
   const getIpAddress = async () => {
     try {
@@ -30,7 +32,17 @@ const useGeoIpInfo = () => {
     }
   };
 
+  const fetchingUser = async () => {
+    try {
+      const data = await getVisitors();
+      setFetchUser(data);
+    } catch (err) {
+      console.error("Error occured while fetching user: ", err);
+    }
+  };
+
   useEffect(() => {
+    fetchingUser();
     getIpAddress();
   }, []);
 
@@ -40,7 +52,7 @@ const useGeoIpInfo = () => {
     }
   }, [ipAddress]);
 
-  return { ipAddress, geoUserInfo, error };
+  return { ipAddress, geoUserInfo, error, fetchUser };
 };
 
 export default useGeoIpInfo;

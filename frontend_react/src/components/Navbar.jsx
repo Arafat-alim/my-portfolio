@@ -3,25 +3,15 @@ import "./Navbar.scss";
 import { images } from "../constants";
 import { HiMenuAlt4, HiX } from "react-icons/hi";
 import { motion } from "framer-motion";
-import { getVisitors, postVisitor } from "../db";
+import { postVisitor } from "../db";
 import { sendDataToDiscord } from "../hook/sendDataToDiscord";
 import useGeoIpInfo from "../hook/useGeoIpInfo";
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
-  const [fetchVisitedUsers, setFetchVisitedUsers] = useState([]);
-  const { ipAddress: ip, geoUserInfo, error } = useGeoIpInfo();
+  const { ipAddress: ip, geoUserInfo, error, fetchUser } = useGeoIpInfo();
 
   const webhookUrl = process.env.REACT_APP_DISCORD_WEBHOOK_VISITORS;
-
-  const fetchVisitor = async () => {
-    const result = await getVisitors(); // Call getVisitors after sendVisitors
-    setFetchVisitedUsers(result);
-  };
-
-  useEffect(() => {
-    fetchVisitor();
-  }, [fetchVisitedUsers]);
 
   const sendVisitors = async () => {
     if (!geoUserInfo && !ip) {
@@ -46,7 +36,7 @@ const NavBar = () => {
           (await sendDataToDiscord({
             data: {
               ...geoUserInfo,
-              visitors: fetchVisitedUsers.length,
+              visitors: fetchUser?.length,
               user_agent: navigator.userAgent,
               server: process.env.NODE_ENV || "not-found",
             },
@@ -79,7 +69,7 @@ const NavBar = () => {
           await sendDataToDiscord({
             data: {
               ip_address: ip,
-              visitors: fetchVisitedUsers.length,
+              visitors: fetchUser?.length,
               user_agent: navigator.userAgent,
               server: process.env.NODE_ENV || "not-found",
             },
@@ -122,7 +112,7 @@ const NavBar = () => {
           />
           <p style={{ fontWeight: 500, fontSize: "1rem" }}>
             {" "}
-            {fetchVisitedUsers.length}
+            {fetchUser?.length}
           </p>
         </div>
       </div>
@@ -143,7 +133,7 @@ const NavBar = () => {
                 "skills",
                 "testimonials",
                 "contact",
-                `visitors count: ${fetchVisitedUsers.length}`,
+                `visitors count: ${fetchUser?.length}`,
               ].map((item) => (
                 <li key={item}>
                   <a href={`#${item}`} onClick={() => setToggle(false)}>
