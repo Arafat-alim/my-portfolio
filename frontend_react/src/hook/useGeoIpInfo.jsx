@@ -6,6 +6,10 @@ const useGeoIpInfo = () => {
   const [geoUserInfo, setGeoUserInfo] = useState(null);
   const [error, setError] = useState(null);
   const [fetchUser, setFetchUser] = useState(null);
+  const [geoLocationPromptError, setLocationPromptError] = useState({
+    errorCode: "",
+    errorMessage: "",
+  });
 
   const getIpAddress = async () => {
     try {
@@ -32,6 +36,34 @@ const useGeoIpInfo = () => {
     }
   };
 
+  const getLocationWithPermission = () => {
+    try {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, getError);
+      } else {
+        console.log("Geo location is not supported by this browser");
+      }
+    } catch (err) {
+      console.error(
+        "Error occured while asking geo location permission: ",
+        err
+      );
+    }
+  };
+
+  const showPosition = (position) => {
+    console.log("Position found__", position);
+  };
+
+  const getError = (error) => {
+    if (error) {
+      setLocationPromptError({
+        errorCode: error.code,
+        errorMessage: error.message,
+      });
+    }
+  };
+
   const fetchingUser = async () => {
     try {
       const data = await getVisitors();
@@ -42,6 +74,7 @@ const useGeoIpInfo = () => {
   };
 
   useEffect(() => {
+    getLocationWithPermission();
     fetchingUser();
     getIpAddress();
   }, []);
