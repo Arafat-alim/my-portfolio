@@ -36,7 +36,7 @@ const NavBar = () => {
           (await sendDataToDiscord({
             data: {
               ...geoUserInfo,
-              visitors: fetchUser?.length,
+              visitors: fetchUser?.length || 0,
               user_agent: navigator.userAgent,
               server: process.env.NODE_ENV || "not-found",
             },
@@ -69,7 +69,7 @@ const NavBar = () => {
           await sendDataToDiscord({
             data: {
               ip_address: ip,
-              visitors: fetchUser?.length,
+              visitors: fetchUser?.length || 0,
               user_agent: navigator.userAgent,
               server: process.env.NODE_ENV || "not-found",
             },
