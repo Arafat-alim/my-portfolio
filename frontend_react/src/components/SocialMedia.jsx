@@ -10,6 +10,7 @@ const SocialMedia = () => {
           href="https://github.com/Arafat-alim"
           target="_blank"
           rel="noreferrer"
+          title="GitHub"
         >
           <FaGithub />
         </a>
@@ -19,6 +20,7 @@ const SocialMedia = () => {
           href="https://stackoverflow.com/users/20520620/arafat-alim"
           target="_blank"
           rel="noreferrer"
+          title="Stack Overflow"
         >
           <FaStackOverflow />
         </a>
@@ -28,6 +30,7 @@ const SocialMedia = () => {
           href="https://leetcode.com/u/Arafat-alim/"
           target="_blank"
           rel="noreferrer"
+          title="LeetCode"
         >
           <FaCode />
         </a>
@@ -37,6 +40,7 @@ const SocialMedia = () => {
           href="https://twitter.com/CoderAlim"
           target="_blank"
           rel="noreferrer"
+          title="Twitter"
         >
           <BsTwitter />
         </a>
@@ -46,6 +50,7 @@ const SocialMedia = () => {
           href="https://www.linkedin.com/in/arafat-alim/"
           target="_blank"
           rel="noreferrer"
+          title="Linkedin"
         >
           <BsLinkedin />
         </a>
